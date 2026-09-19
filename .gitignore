@@ -1,0 +1,16 @@
+# --- Python & Backend ---
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+*.db
+faiss_index/
+
+# --- Node & Frontend ---
+node_modules/
+dist/
+build/
+
+# --- Environment & OS Files ---
+.DS_Store
+Thumbs.db
