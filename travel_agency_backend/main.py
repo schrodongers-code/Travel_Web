@@ -30,6 +30,10 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Travel Agency AI Chatbot Backend")
 
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "Travel Agency API is running"}
+
 
 # ============================================================
 # CORS

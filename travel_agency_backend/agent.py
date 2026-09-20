@@ -286,8 +286,6 @@ def get_agent():
         raise RuntimeError(
             "GEMINI_API_KEY or GOOGLE_API_KEY is not configured."
     )
-    else:
-        print(f"API KEY FOUND: {api_key[:5]}...{api_key[-5:]}")
         
     llm = ChatGoogleGenerativeAI(
         model="gemini-3.1-flash-lite",
