@@ -9,6 +9,4 @@ pypdf
 sentence-transformers
 pandas
 python-dotenv
-resend
-sqlalchemy
-email-validator
+
