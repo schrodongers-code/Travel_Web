@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-import { MessageSquare, X, Send, Bot, User } from 'lucide-react'
+import { MessageSquare, X, Send, Bot, User, Mic, MicOff } from 'lucide-react'
 
 import ReactMarkdown from 'react-markdown'
 
@@ -22,8 +22,62 @@ export default function Chatbot({ onAiBooking }) {
   ])
 
   const [input, setInput] = useState('')
+  const [isListening, setIsListening] = useState(false)
+  const [shouldSubmit, setShouldSubmit] = useState(false)
 
   const messagesEndRef = useRef(null)
+  const recognitionRef = useRef(null)
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      
+      recognitionRef.current.onresult = (event) => {
+        let currentTranscript = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          currentTranscript += event.results[i][0].transcript;
+        }
+        setInput(currentTranscript);
+      };
+      
+      recognitionRef.current.onstart = () => setIsListening(true);
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+        setShouldSubmit(true);
+      };
+      recognitionRef.current.onerror = (e) => {
+        console.error('Speech recognition error', e.error);
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert("Your browser does not support voice input.");
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      setInput('');
+      recognitionRef.current.start();
+    }
+  };
+
+  useEffect(() => {
+    if (shouldSubmit) {
+      setShouldSubmit(false);
+      // Let React update the input state from the final onresult event first
+      setTimeout(() => {
+        const form = document.getElementById('chat-form');
+        if (form) form.requestSubmit();
+      }, 300);
+    }
+  }, [shouldSubmit]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -339,6 +393,7 @@ export default function Chatbot({ onAiBooking }) {
         {/* Input area */}
 
         <form
+          id="chat-form"
           onSubmit={handleSend}
           className="p-3 bg-white border-t border-slate-200 flex items-center"
         >
@@ -347,14 +402,26 @@ export default function Chatbot({ onAiBooking }) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about flights or policies..."
-            className="flex-grow bg-slate-100 border-transparent focus:bg-white focus:border-violet-500 focus:ring-2 focus:ring-violet-200 rounded-full px-4 py-2 text-sm outline-none transition-all"
+            placeholder={isListening ? "Listening..." : "Ask about flights or policies..."}
+            className={`flex-grow border-transparent focus:bg-white focus:border-violet-500 rounded-full px-4 py-2 text-sm outline-none transition-all ${isListening ? "ring-2 ring-violet-400 bg-violet-50" : "bg-slate-100 focus:ring-2 focus:ring-violet-200"}`}
           />
+
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={`ml-2 p-2 rounded-full transition-colors flex items-center justify-center ${
+              isListening 
+                ? "bg-red-500 hover:bg-red-600 text-white animate-pulse" 
+                : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+            }`}
+          >
+            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </button>
 
           <button
             type="submit"
             disabled={!input.trim()}
-            className="ml-2 bg-violet-600 text-white p-2 rounded-full hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="ml-2 bg-violet-600 text-white p-2 rounded-full hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
           >
             <Send className="h-4 w-4" />
           </button>
