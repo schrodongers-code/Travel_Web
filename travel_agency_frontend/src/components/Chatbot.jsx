@@ -65,7 +65,7 @@ export default function Chatbot({ onAiBooking }) {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/chat',
+        'https://travel-web-45r8.onrender.com/chat',
         {
           method: 'POST',
 
