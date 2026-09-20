@@ -12,7 +12,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 # 1. Setup paths
 # ============================================================
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 FLIGHTS_CSV = os.path.join(BASE_DIR, "flights.csv")
 PACKAGES_CSV = os.path.join(BASE_DIR, "travel_packages.csv")
