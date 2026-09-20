@@ -19,6 +19,7 @@ PACKAGES_CSV = os.path.join(BASE_DIR, "travel_packages.csv")
 
 FAISS_INDEX = os.path.join(
     BASE_DIR,
+    "travel_agency_backend",
     "faiss_index"
 )
 
