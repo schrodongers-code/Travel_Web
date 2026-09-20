@@ -1,7 +1,9 @@
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from dotenv import load_dotenv
+load_dotenv()
 from langchain_community.vectorstores import FAISS
 
 def setup_rag():
@@ -30,8 +32,8 @@ def setup_rag():
     
     print(f"Created {len(splits)} chunks.")
     
-    # Use HuggingFace local embeddings (free and fast)
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    # Use Gemini Embeddings to save RAM
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2")
     
     print("Building FAISS index...")
     vectorstore = FAISS.from_documents(splits, embeddings)

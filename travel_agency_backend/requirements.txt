@@ -3,10 +3,8 @@ uvicorn
 langchain
 langchain-google-genai
 langchain-community
-langchain-huggingface
 faiss-cpu
 pypdf
-sentence-transformers
 pandas
 python-dotenv
 resend
