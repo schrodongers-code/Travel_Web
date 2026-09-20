@@ -24,9 +24,26 @@ export default function Chatbot({ onAiBooking }) {
   const [input, setInput] = useState('')
   const [isListening, setIsListening] = useState(false)
   const [shouldSubmit, setShouldSubmit] = useState(false)
+  const [showRobot, setShowRobot] = useState(true)
 
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
+
+  // Robot peek-a-boo animation loop
+  useEffect(() => {
+    if (isOpen) {
+      setShowRobot(false);
+      return;
+    }
+    
+    setShowRobot(true);
+    const interval = setInterval(() => {
+      setShowRobot(false);
+      setTimeout(() => setShowRobot(true), 1000); // hide for 1 second
+    }, 6000); // stay visible for 5 seconds (5s + 1s = 6s cycle)
+
+    return () => clearInterval(interval);
+  }, [isOpen]);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -212,19 +229,32 @@ export default function Chatbot({ onAiBooking }) {
 
   return (
     <>
-      {/* Chat button */}
-
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 bg-violet-600 text-white p-4 rounded-full shadow-lg hover:bg-violet-700 transition-all duration-300 z-50 flex items-center justify-center ${
+      {/* Chat button and Robot GIF wrapper */}
+      <div
+        className={`fixed bottom-6 right-6 z-50 flex flex-col items-end transition-all duration-300 ${
           isOpen
             ? 'scale-0 opacity-0 pointer-events-none'
-            : 'scale-100 opacity-100 hover:scale-105'
+            : 'scale-100 opacity-100'
         }`}
-        aria-label="Open chat"
       >
-        <MessageSquare className="h-6 w-6" />
-      </button>
+        {/* The Robot GIF */}
+        <img 
+          src="/robot.gif" 
+          alt="AI Assistant" 
+          className={`w-64 h-64 object-contain -mb-16 translate-x-6 translate-y-6 cursor-pointer transition-all duration-500 origin-bottom-right ${
+            showRobot ? 'scale-100 opacity-100 hover:scale-110' : 'scale-0 opacity-0'
+          }`}
+          onClick={() => setIsOpen(true)}
+        />
+        
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-violet-600 text-white p-4 rounded-full shadow-lg hover:bg-violet-700 transition-all duration-300 flex items-center justify-center hover:scale-105"
+          aria-label="Open chat"
+        >
+          <MessageSquare className="h-6 w-6" />
+        </button>
+      </div>
 
 
       {/* Chat window */}
