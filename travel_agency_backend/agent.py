@@ -12,14 +12,13 @@ from langchain_huggingface import HuggingFaceEmbeddings
 # 1. Setup paths
 # ============================================================
 
-BASE_DIR = r"C:\Users\sanja\Desktop\Travel_Web"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 FLIGHTS_CSV = os.path.join(BASE_DIR, "flights.csv")
 PACKAGES_CSV = os.path.join(BASE_DIR, "travel_packages.csv")
 
 FAISS_INDEX = os.path.join(
     BASE_DIR,
-    "travel_agency_backend",
     "faiss_index"
 )
 
