@@ -241,7 +241,7 @@ export default function Chatbot({ onAiBooking }) {
         <img 
           src="/robot.gif" 
           alt="AI Assistant" 
-          className={`w-64 h-64 object-contain -mb-16 translate-x-6 translate-y-6 cursor-pointer transition-all duration-500 origin-bottom-right ${
+          className={`w-48 h-48 object-contain -mb-16 translate-x-6 translate-y-6 cursor-pointer transition-all duration-500 origin-bottom-right ${
             showRobot ? 'scale-100 opacity-100 hover:scale-110' : 'scale-0 opacity-0'
           }`}
           onClick={() => setIsOpen(true)}
