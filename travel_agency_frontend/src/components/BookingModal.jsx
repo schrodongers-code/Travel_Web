@@ -40,7 +40,7 @@ export default function BookingModal({ isOpen, onClose, selectedPackage, initial
 
   const handlePayment = async () => {
     try {
-      const response = await fetch('https://travel-web-45r8.onrender.com', {
+      const response = await fetch('https://travel-web-45r8.onrender.com/book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
