@@ -241,15 +241,15 @@ export default function Chatbot({ onAiBooking }) {
         <img 
           src="/robot.gif" 
           alt="AI Assistant" 
-          className={`w-48 h-48 object-contain -mb-16 translate-x-6 translate-y-6 cursor-pointer transition-all duration-500 origin-bottom-right ${
-            showRobot ? 'scale-100 opacity-100 hover:scale-110' : 'scale-0 opacity-0'
+          className={`relative z-0 w-48 h-48 object-contain -mb-16 translate-x-4 cursor-pointer transition-all duration-700 ease-in-out ${
+            showRobot ? 'translate-y-6 opacity-100 hover:scale-110' : 'translate-y-32 opacity-0 pointer-events-none'
           }`}
           onClick={() => setIsOpen(true)}
         />
         
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-violet-600 text-white p-4 rounded-full shadow-lg hover:bg-violet-700 transition-all duration-300 flex items-center justify-center hover:scale-105"
+          className="relative z-10 bg-violet-600 text-white p-4 rounded-full shadow-lg hover:bg-violet-700 transition-all duration-300 flex items-center justify-center hover:scale-105"
           aria-label="Open chat"
         >
           <MessageSquare className="h-6 w-6" />
