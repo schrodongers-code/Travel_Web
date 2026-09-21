@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .terminal-container { font-family: monospace; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+    
+    <!-- Top Nav -->
+    <div class="bg-slate-900 text-white p-4 shadow-md flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <svg class="h-6 w-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            <h1 class="text-xl font-bold">Staff Dashboard (Secure Backend Portal)</h1>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="p-8 max-w-7xl mx-auto">
+        
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                <div class="bg-violet-100 p-3 rounded-full text-violet-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Total Bookings</p>
+                    <h3 class="text-2xl font-bold" id="total-bookings">0</h3>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                <div class="bg-emerald-100 p-3 rounded-full text-emerald-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Total Revenue</p>
+                    <h3 class="text-2xl font-bold" id="total-revenue">₹0</h3>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Total Travelers</p>
+                    <h3 class="text-2xl font-bold" id="total-travelers">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-slate-800">Recent Bookings</h2>
+                <button onclick="fetchBookings()" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1 rounded transition-colors">Refresh Data</button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-slate-500 text-sm">
+                        <tr>
+                            <th class="p-4 font-semibold">Ref ID</th>
+                            <th class="p-4 font-semibold">Customer</th>
+                            <th class="p-4 font-semibold">Package</th>
+                            <th class="p-4 font-semibold">Date</th>
+                            <th class="p-4 font-semibold">Amount</th>
+                            <th class="p-4 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100" id="table-body">
+                        <tr><td colspan="6" class="p-8 text-center text-slate-500">Loading bookings...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff AI Terminal -->
+    <button onclick="document.getElementById('terminal').classList.toggle('hidden')" class="fixed bottom-6 right-6 bg-slate-900 text-emerald-400 p-4 rounded-full shadow-lg hover:bg-slate-800 border border-slate-700 transition-all z-50">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+    </button>
+
+    <div id="terminal" class="hidden fixed bottom-24 right-6 w-96 h-[500px] bg-slate-900 rounded-2xl shadow-2xl flex flex-col z-50 border border-slate-700 terminal-container">
+        <div class="bg-slate-950 text-emerald-400 p-4 flex justify-between items-center border-b border-slate-800 rounded-t-2xl">
+            <span class="font-bold text-sm tracking-widest text-red-500">STAFF_AI_TERMINAL</span>
+            <button onclick="document.getElementById('terminal').classList.add('hidden')" class="text-slate-400 hover:text-white">✕</button>
+        </div>
+        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4">
+            <div class="text-sm bg-slate-800 text-slate-300 border border-slate-700 p-3 rounded-lg max-w-[85%]">
+                SYSTEM ONLINE. I am the internal Staff AI. How can I assist you?
+            </div>
+        </div>
+        <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center rounded-b-2xl">
+            <span class="text-emerald-500 mr-2">></span>
+            <input type="text" id="chat-input" placeholder="Enter command..." class="flex-grow bg-transparent border-none text-emerald-400 focus:outline-none text-sm placeholder-slate-600" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+        </div>
+    </div>
+
+    <script>
+        const sessionId = crypto.randomUUID();
+
+        async function fetchBookings() {
+            try {
+                const response = await fetch('/bookings');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const tbody = document.getElementById('table-body');
+                    tbody.innerHTML = '';
+                    
+                    let totalRevenue = 0;
+                    let totalTravelers = 0;
+
+                    if (data.bookings.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-500">No bookings found in database.</td></tr>';
+                    } else {
+                        data.bookings.forEach(bkg => {
+                            totalRevenue += bkg.amount_paid || 0;
+                            totalTravelers += bkg.travelers_count || 0;
+                            
+                            tbody.innerHTML += `
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 text-sm font-medium text-violet-600">${bkg.booking_reference}</td>
+                                    <td class="p-4">
+                                        <div class="font-semibold text-slate-800">${bkg.customer_name}</div>
+                                        <div class="text-xs text-slate-500">${bkg.customer_email}</div>
+                                    </td>
+                                    <td class="p-4 text-sm text-slate-700">${bkg.package_name}</td>
+                                    <td class="p-4 text-sm text-slate-700">${bkg.travel_date}</td>
+                                    <td class="p-4 text-sm font-semibold">₹${bkg.amount_paid}</td>
+                                    <td class="p-4">
+                                        <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">${bkg.payment_status}</span>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    document.getElementById('total-bookings').innerText = data.bookings.length;
+                    document.getElementById('total-revenue').innerText = '₹' + totalRevenue.toLocaleString();
+                    document.getElementById('total-travelers').innerText = totalTravelers;
+                }
+            } catch (error) {
+                console.error("Error fetching bookings:", error);
+            }
+        }
+
+        async function sendChatMessage() {
+            const inputEl = document.getElementById('chat-input');
+            const messagesEl = document.getElementById('chat-messages');
+            const message = inputEl.value.trim();
+            if (!message) return;
+
+            // Add user message
+            messagesEl.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="text-sm bg-emerald-900/30 text-emerald-300 border border-emerald-800/50 p-3 rounded-lg max-w-[85%]">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            inputEl.value = '';
+            
+            // Add loading
+            const loadingId = 'loading-' + Date.now();
+            messagesEl.innerHTML += `
+                <div id="${loadingId}" class="flex justify-start">
+                    <div class="text-sm bg-slate-800 text-slate-400 border border-slate-700 p-3 rounded-lg max-w-[85%]">
+                        Processing...
+                    </div>
+                </div>
+            `;
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, session_id: sessionId })
+                });
+                const data = await response.json();
+                
+                document.getElementById(loadingId).remove();
+                
+                // Basic text rendering (no markdown for simplicity in raw HTML, just preserving line breaks)
+                const formattedText = data.response.replace(/\n/g, '<br>');
+                
+                messagesEl.innerHTML += `
+                    <div class="flex justify-start">
+                        <div class="text-sm bg-slate-800 text-slate-300 border border-slate-700 p-3 rounded-lg max-w-[85%]">
+                            ${formattedText}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                messagesEl.innerHTML += `
+                    <div class="flex justify-start">
+                        <div class="text-sm bg-red-900/30 text-red-400 border border-red-800/50 p-3 rounded-lg max-w-[85%]">
+                            Error connecting to AI Backend.
+                        </div>
+                    </div>
+                `;
+            }
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        // Fetch on load
+        fetchBookings();
+    </script>
+</body>
+</html>

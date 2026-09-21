@@ -53,12 +53,9 @@ export default function Header({ user, onLoginClick, onLogout }) {
         <nav className="hidden md:flex space-x-8 text-sm font-semibold text-slate-700">
           <a href="#" className="hover:text-violet-600 transition-colors">Home</a>
           <a href="#" className="hover:text-violet-600 transition-colors">About</a>
-          <a href="#" className="hover:text-violet-600 transition-colors">Destination</a>
           <a href="#" className="hover:text-violet-600 transition-colors">Tour</a>
           <a href="#" className="hover:text-violet-600 transition-colors">Blog</a>
-          <a href="#" className="hover:text-violet-600 transition-colors">Hotels</a>
-          <a href="#" className="hover:text-violet-600 transition-colors">Pages</a>
-          <a href="#" className="hover:text-violet-600 transition-colors">Contact</a>
+          <a href="/admin" className="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">Staff Portal</a>
         </nav>
 
         <button className="bg-violet-600 hover:bg-violet-700 text-white p-2.5 rounded-full transition-colors">

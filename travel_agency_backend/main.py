@@ -324,6 +324,27 @@ async def create_booking(req: BookingRequest, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
+from fastapi.responses import HTMLResponse
+import os
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_dashboard():
+    # Serve the admin.html file from the backend directly
+    file_path = os.path.join(os.path.dirname(__file__), "admin.html")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "<h1>Admin Dashboard not found!</h1>"
+
+@app.get("/bookings")
+async def get_all_bookings(db: Session = Depends(get_db)):
+    try:
+        bookings = db.query(Booking).order_by(Booking.booking_date.desc()).all()
+        return {"status": "success", "bookings": bookings}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ============================================================
 # Run server
 # ============================================================
