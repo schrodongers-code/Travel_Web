@@ -11,3 +11,5 @@ resend
 sqlalchemy
 email-validator
 psycopg2-binary
+mcp
+httpx

@@ -205,6 +205,23 @@ def create_itinerary(destination: str, days: int) -> str:
     )
 
 
+import httpx
+
+@tool
+def get_weather(location: str) -> str:
+    """
+    Gets the live current weather for a specific city or destination.
+    Use this to tell the user the weather before they book.
+    """
+    try:
+        # Using wttr.in, a free weather service that requires no API key!
+        response = httpx.get(f"https://wttr.in/{location}?format=%C+%t", timeout=5.0)
+        if response.status_code == 200:
+            return f"The current weather in {location} is {response.text.strip()}."
+        return f"Could not fetch weather for {location}."
+    except Exception as e:
+        return f"Error fetching weather: {e}"
+
 # ============================================================
 # 4. Register tools
 # ============================================================
@@ -217,7 +234,8 @@ tools = [
     verify_package,
     search_policies,
     search_visa_info,
-    create_itinerary
+    create_itinerary,
+    get_weather
 ]
 
 
