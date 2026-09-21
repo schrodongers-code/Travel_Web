@@ -202,6 +202,26 @@ async def chat_endpoint(req: ChatRequest):
 
 
 # ============================================================
+# Admin Chat endpoint
+# ============================================================
+
+from admin_agent import get_admin_agent
+admin_agent = get_admin_agent()
+
+@app.post("/admin-chat")
+async def admin_chat_endpoint(req: ChatRequest):
+    try:
+        config = {"configurable": {"session_id": req.session_id}}
+        result = admin_agent.invoke(
+            {"input": req.message}, 
+            config
+        )
+        return {"response": result["output"]}
+    except Exception as e:
+        print("Admin Chat Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ============================================================
 # Health check
 # ============================================================
 @app.get("/test-email")
